@@ -6,8 +6,8 @@ make and i want to improve my programming skills.**
 There is none.
 
 ## Keybinds
-| Function   | Key      |
-|------------|----------|
-| UP/DOWN    | K/J      |
-| LEFT/RIGHT | H/L      |
-| Exit       | Q or ESC |
+| Function          | Key               |
+|-------------------|-------------------|
+| UP/DOWN           | K/J               |
+| LEFT/RIGHT        | H/L               |
+| Exit              | Q or ESC          |
