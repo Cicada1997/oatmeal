@@ -30,7 +30,8 @@ PObject::~PObject()
 void PObject::applyForce(const Vector& force) 
 {
     // F = m * a  →  a = F / m
-    acceleration += force / mass;
+    if (mass != 0 || force.x != 0 || force.y != 0)
+        acceleration += force / mass;
 }
 
 void PObject::setTerminalVelocity(double tv) { terminal_velocity = tv; }
@@ -46,7 +47,7 @@ void PObject::update(double dt)
     velocity += acceleration * dt;
 
     double speed = getSpeed();
-    if (speed > terminal_velocity) 
+    if (speed > terminal_velocity && speed != 0 && terminal_velocity != 0) 
     {
         double scale = terminal_velocity / speed;
         velocity *= scale;
