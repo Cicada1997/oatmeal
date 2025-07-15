@@ -7,8 +7,8 @@ There is none.
 
 ## Keybinds
 ### Movement
-\- UP/DOWN \t K/J
-\- LEFT/RIGHT \t H/L
+\- UP/DOWN K/J
+\- LEFT/RIGHT H/L
 
 ### Exit
 \- Q or ESC
