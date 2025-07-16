@@ -4,6 +4,9 @@
 #include "AliveEntity.hh"
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <iterator>
+#include "cstdlib"
 
 using namespace std;
 
@@ -29,6 +32,12 @@ class Enemy: public AliveEntity
           : AliveEntity(id, renderer, viewport)
           , attack_damage(attackDamage_)
     {
+        // red:
+        int rgb[] = {255, 0, 0};
+
+        copy(begin(rgb), end(rgb), begin(color));
+        // color[0] = 255; color[1] = 0; color[2] = 0;
+
         cout << "Enemy created, entity id: " << id << endl;
     };
 

@@ -13,13 +13,14 @@
 #include "Vector.hh"
 
 int init_SDL(SDL_Window*& window, SDL_Renderer*& renderer, int width, int height);
-int update(SDL_Event* e, Vector* force, Vector* viewport);
+int updateInput(SDL_Event* e, Vector* force, Vector* viewport);
 
 int main(int argc, char** argv) 
 {
+    // Fuck my precompiler
     printf("%d %s", argc, *argv);
 
-    debug.enabled = true;
+    debug.enabled = true; // Depricated shit
 
     SDL_Window*   window        = nullptr;
     SDL_Renderer* renderer      = nullptr;
@@ -53,7 +54,7 @@ int main(int argc, char** argv)
 
 
     // tjofs för deltatime å det
-    const double MS_PER_UPDATE = 1.0 / 60.0; // 60Hz physics
+    const double MS_PER_UPDATE = 1.0 / 240.0; // 60Hz physics
     double       accumulator   = 0.0;
 
     Uint64 previous = SDL_GetPerformanceCounter();
@@ -61,6 +62,8 @@ int main(int argc, char** argv)
 
     bool running = true;
     int  frameId = 0;
+
+    int fps = 0;
 
     while (running) 
     {
@@ -73,7 +76,7 @@ int main(int argc, char** argv)
         force             = {0, 0};
         SDL_Event e;
 
-        int res = update(&e, &force, &viewport);
+        int res = updateInput(&e, &force, &viewport);
         if (res) running = false;
 
         while (accumulator >= MS_PER_UPDATE) 
@@ -98,6 +101,7 @@ int main(int argc, char** argv)
 
         // std::cout << "[ viewport position ]\tx: " << viewport.x << "y: " << viewport.y << std::endl;
 
+
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
         for (std::size_t i = 0; i < AliveEntities.size(); i++)
@@ -117,7 +121,7 @@ int main(int argc, char** argv)
     return 0;
 }
 
-int update(SDL_Event* e, Vector* force, Vector* viewport)
+int updateInput(SDL_Event* e, Vector* force, Vector* viewport)
 {
 
     while (SDL_PollEvent(e)) 
