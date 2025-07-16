@@ -15,6 +15,9 @@ class PObject
         PObject(int id_, SDL_Renderer* renderer_, Vector* viewport_);
         ~PObject();
 
+        // Calculate distance to position
+        double distance(Vector* position);
+
         // apply an instant force (F = m * a → a = F/m)
         void applyForce(const Vector& force);
         void setTerminalVelocity(double tv);
@@ -22,6 +25,7 @@ class PObject
 
         // simulate one time‐slice of dt seconds
         void update(double dt);
+        void lifeloop(double dt); // Made to be overwritten by derived classes
 
         Vector  getWorldPosition() const { return worldPosition; }
         Vector  getDimensions() const { return dimensions; }

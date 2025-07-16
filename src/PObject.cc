@@ -37,9 +37,23 @@ void PObject::applyForce(const Vector& force)
 void PObject::setTerminalVelocity(double tv) { terminal_velocity = tv; }
 void PObject::setWorldPosition(Vector xy) { worldPosition = xy; }
 
+double PObject::distance(Vector* position)
+{
+    Vector distanceVector  = (this->worldPosition - *position);
+
+    double distance        = sqrt(distanceVector.x * distanceVector.x + distanceVector.y * distanceVector.y);
+
+    return distance;
+}
+
 double PObject::getSpeed() const 
 {
     return sqrt(velocity.x*velocity.x + velocity.y*velocity.y);
+}
+
+void PObject::lifeloop(double dt)
+{
+    cerr << "Lifeloop not configured for entity with id '" << id << "'!" << endl;
 }
 
 void PObject::update(double dt) 
