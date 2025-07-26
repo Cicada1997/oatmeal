@@ -1,8 +1,9 @@
 INC_DIR   := include
+COM_DIR   := src/components/*/*
 
 # Compiler settings
 CXX       := g++
-CXXFLAGS  := -Wall -Wextra -I$(INC_DIR)
+CXXFLAGS  := -Wall -Wextra -I$(INC_DIR) -I$(COM_DIR)
 
 # Directory layout
 SRC_DIR   := src
