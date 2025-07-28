@@ -13,11 +13,6 @@ enum class ComponentType {
     Player,
 };
 
-typedef struct {
-    uint64_t id;
-    std::unordered_set<ComponentType> components;
-} Entity;
-
 class ECS
 {
     sparse_set<std::unordered_set<ComponentType>> World;
@@ -30,7 +25,7 @@ class ECS
     };
 
     void create_entity(uint64_t entityID, std::unordered_set<ComponentType> components);
-    std::unordered_set<ComponentType> getEntity(uint64_t entityID);
+    std::unordered_set<ComponentType>* getEntity(uint64_t entityID);
 
     // @brief Gets the entity from the world, then appends the
     // @brief enum class representing the component to the world.
