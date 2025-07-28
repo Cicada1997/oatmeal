@@ -1,68 +1,13 @@
-#include <algorithm>
+#include <cmath>
 #include <cstdint>
 #include <fmt/core.h>
-#include <limits>
 #include <unordered_set>
-#include <vector>
+
+#include "sparse_set.hh"
 
 // HALELELUJA
 // int x = 9;
 // fmt::print("Apa nr {}", x);
-
-using namespace std;
-
-template <class T>
-class SparseSet
-{
-    static constexpr uint64_t npos = numeric_limits<uint64_t>::max();
-
-    protected:
-        vector<uint64_t> sparse; // @brief stores dense indexes
-                                 // @index entityID
-                                 // @return uint64_t denseIndex
-        vector<uint64_t> reversed;
-        vector<T> dense;          // @brief Stores the
-                                  // unordered_set of components
-                                  // for the id
-                                  // @index uint64_t
-                                  // @return unordered_set<ComponentType>
-    
-    public:
-        void add(uint64_t entityID, T component)
-        {
-            sparse[entityID] = dense.size();
-            reversed[dense.size()] = entityID;
-            dense.push_back(component);
-        };
-
-        T* get(uint64_t entityID)
-        {
-            uint64_t index = sparse[entityID];
-
-            if (index == npos)
-                return nullptr;
-
-            return &dense[index];
-        };
-
-        void remove(uint64_t entityID)
-        {
-            uint64_t index = sparse[entityID];
-            if (index == npos)
-                return;
-
-            swap(dense.back(), dense[index]);
-            swap(reversed.back(), reversed[index]);
-
-            sparse[reversed[index]] = index;
-
-            dense.pop_back();
-            reversed.pop_back();
-
-            sparse[entityID] = npos;
-        };
-};
-
 
 enum class ComponentType {
     Transform,
@@ -73,54 +18,97 @@ enum class ComponentType {
 
 typedef struct {
     uint64_t id;
-    unordered_set<ComponentType> components;
+    std::unordered_set<ComponentType> components;
 } Entity;
 
 class ECS
 {
-    uint64_t m_UserID;
-    SparseSet<unordered_set<ComponentType>> World;
+    sparse_set<std::unordered_set<ComponentType>> World;
 
     public:
-        void create_entity(uint64_t entityID, unordered_set<ComponentType> components) 
-        {
-            World.add(entityID, components);
-        };
+    ECS(uint64_t MAX_ENTITIES)
+        : World(MAX_ENTITIES)
+    {
+        fmt::print("ECS initialized");
+    };
 
-        unordered_set<ComponentType> getEntity(uint64_t entityID) 
-        {
-            return *World.get(entityID);
-        };
+    void create_entity(uint64_t entityID, std::unordered_set<ComponentType> components) 
+    {
+        World.add(entityID, components);
+    };
 
-        // @brief Gets the entity from the world, then appends the
-        // @brief enum class representing the component to the world.
-        void AddComponent(uint64_t entityID, ComponentType component)
-        {
-            auto entityComponents = *World.get(entityID);
-            entityComponents.insert(component);
-        };
+    std::unordered_set<ComponentType> getEntity(uint64_t entityID) 
+    {
+        return *World.get(entityID);
+    };
 
-        // @brief Gets the entity from the world, then deletes the
-        // @brief enum class representing the component from the world.
-        void withdrawComponent(uint64_t entityID, ComponentType component)
-        {
-            auto entityComponents = *World.get(entityID);
-            entityComponents.erase(component);
-        };
+    // @brief Gets the entity from the world, then appends the
+    // @brief enum class representing the component to the world.
+    void AddComponent(uint64_t entityID, ComponentType component)
+    {
+        auto entityComponents = *World.get(entityID);
+        entityComponents.insert(component);
+    };
 
-        void removeEntity(uint64_t entityID)
-        {
-            World.remove(entityID);
-        }
+    // @brief Gets the entity from the world, then deletes the
+    // @brief enum class representing the component from the world.
+    void withdrawComponent(uint64_t entityID, ComponentType component)
+    {
+        auto entityComponents = *World.get(entityID);
+        entityComponents.erase(component);
+    };
+
+    void removeEntity(uint64_t entityID)
+    {
+        World.remove(entityID);
+    }
+};
+
+struct Vector
+{
+    double x;
+    double y;
+};
+
+double dabs(double x) { return x >= 0 ? x : x*-1; }; // @brief calculates absolute value for doubles.
+
+double vecDist(Vector pos1, Vector pos2)
+{
+    double dx2 = dabs(pos1.x - pos2.x) * dabs(pos1.x - pos2.x);
+    double dy2 = dabs(pos1.y - pos2.y) * dabs(pos1.y - pos2.y);
+    return sqrt(dx2 + dy2);
+};
+
+void test_sparse()
+{
+    auto transform = sparse_set<Vector>(256);
+
+    transform.add(12, {4, 9});
+    transform.add(2, {3, -6});
+
+    double dist = vecDist(*transform.get(12), *transform.get(2));
+
+    fmt::print("distance: {}", dist);
+};
+
+void test_ESC()
+{
+    ECS* world = new ECS(256);
+
+    Entity e;
+
+    e.id = 0;
+    e.components.insert(ComponentType::Player);
+    e.components.insert(ComponentType::Transform);
+    e.components.insert(ComponentType::Physics);
+
+    world->create_entity(e.id, e.components);
+
+    delete world;
 };
 
 int main()
 {
-    ECS world;
-
-    Entity e;
-    e.id = 0;
-    e.components.insert(ComponentType::Player);
-
-    world.create_entity(e.id, e.components);
-}
+    test_sparse();
+    test_ESC();
+};
