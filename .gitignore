@@ -1,7 +1,5 @@
-/target
+build/
+bin/
 
-compile_commands.json
-
-.cache/
-
-obj/
+*.swp
+*~
