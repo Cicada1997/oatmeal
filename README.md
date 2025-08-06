@@ -8,15 +8,14 @@ It does not work yet because i just started over...
 <!-- Made with SDL2. -->
 
 Prerequisites:
-- Git
 - GCC/G++ (≥7)
 - CMake (≥3.10)
 
-Build & Run:
+Build and Run:
 
-    cd ~/dev/oatmeal
+    cd oatmeal/
     ./oatmeal.sh
-    ./build/oatmeal
+    ./bin/MyGame
 
 ## Objective
 There is none.
