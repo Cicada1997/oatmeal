@@ -11,6 +11,10 @@ Prerequisites:
 - GCC/G++ (≥7)
 - CMake (≥3.10)
 
+Dependencies:
+- [SDL2](https://www.libsdl.org/)
+- [flecs](https://github.com/SanderMertens/flecs)
+
 Build and Run:
 
     cd oatmeal/
