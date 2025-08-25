@@ -4,3 +4,8 @@ libs/*
 
 *.swp
 *~
+
+
+# Added by cargo
+
+/target
